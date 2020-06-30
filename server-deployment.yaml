@@ -1,0 +1,28 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: git-checks-webserver
+spec:
+  selector:
+    matchLabels:
+      app: git-checks-webserver
+      tier: backend
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: git-checks-webserver
+        tier: backend
+    spec:
+      containers:
+      - name: github-node-server
+        image: gcr.io/<project-id>/github-status-server:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 5001
